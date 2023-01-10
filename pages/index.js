@@ -1,5 +1,6 @@
 import { React } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import LpIllustration from "../components/assets/LpIllustration.png"
 
 export default function Home() {
@@ -20,12 +21,13 @@ export default function Home() {
                         development of this innovative project and be a part of bringing a beloved
                         cultural tradition into the modern age.
                     </div>
-                    <button
+                    <Link
+                        href="/home"
                         id="button_discover_lp"
                         className="px-10 py-3 text-[#ffffff] font-bold "
                     >
                         Discover
-                    </button>
+                    </Link>
                 </div>
                 <div className="flex flex-col justify-end items-end h-[100%] ">
                     <Image

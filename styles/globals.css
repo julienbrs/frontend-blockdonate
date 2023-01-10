@@ -13,3 +13,11 @@ body {
     box-shadow: 0px 6px 12px rgba(171, 190, 209, 0.3);
     border-radius: 49px;
 }
+
+#wrapper_bar_fund {
+    box-shadow: 0px 4px 8px rgba(171, 190, 209, 0.4);
+}
+
+#inner_bar_fund {
+    background: linear-gradient(90deg, #f97316 0%, #fcd34d 108.08%);
+}

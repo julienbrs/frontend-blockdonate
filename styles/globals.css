@@ -21,3 +21,42 @@ body {
 #inner_bar_fund {
     background: linear-gradient(90deg, #f97316 0%, #fcd34d 108.08%);
 }
+
+
+/* Connect Button */
+.sc-gKXOVf.bHfmdT {
+    background: #FFFFFF;
+    border: 2px solid #EA580C;
+    box-shadow: 0px 6px 12px rgba(171, 190, 209, 0.3);
+    border-radius: 36px;
+}
+.sc-ftvSup.hRZEpT {
+    color: #ea280c;
+}
+
+
+// Connected
+// Little wrapper
+[data-testid="test-connect-button-address"] {
+    background: #F1F5F9;
+    color: #94A3B8 !important;
+}
+[data-testid="test-connect-button-address"] span {
+    color: #94A3B8 !important;
+    background: #F1F5F9;
+    border-radius:49px;
+}
+// Big wrapper behind
+.sc-jSMfEi.rWEug{
+    background: #ffffff !important;
+}
+[data-testid="test-native-balance"] {
+    color: #ea280c !important;
+}
+[data-testid="test-connect-button-wrap"]{
+    background: #ffffff;
+    border-radius: 49px;
+}
+.sc-ftvSup.hRZEpT {
+    background: #ffffff ;
+}

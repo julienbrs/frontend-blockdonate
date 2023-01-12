@@ -1,6 +1,8 @@
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ethers } from "ethers"
+import Footer from "../components/Footer"
+import Moralis from "moralis"
 
 import ImgTarot from "../components/assets/ImgTarot.png"
 import logoBackers from "../components/assets/logoBackers.png"
@@ -18,13 +20,11 @@ export default function Home() {
 
     const PRICE = ethers.utils.parseEther("1")
 
-    const { runContractFunction } = useWeb3Contract({
-        abi: BlockDonateAbi,
-        contractAddress: blockDonateAddress,
-    })
-
     const [amount, setAmount] = useState(0.1)
-    const [owner, setOwner] = useState("Andre")
+    const [amountFunded, setAmountFunded] = useState(0)
+    const [numberBackers, setNumberBackers] = useState(0)
+
+    /* Callable functions */
 
     const { runContractFunction: fund } = useWeb3Contract({
         abi: BlockDonateAbi,
@@ -34,78 +34,60 @@ export default function Home() {
         params: {},
     })
 
-    const handleSuccess = async (tx) => {
-        try {
-            await tx.wait(1)
-            updateUIValues()
-            handleNewNotification(tx)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    /* View Functions */
 
-    // async function donateToProject(amount) {
-    //     console.log("Click!")
-    //     console.log("Address is: ", blockDonateAddress)
-    //     console.log("Abi is: ", BlockDonateAbi)
-    //     runContractFunction(
-    //         "fund",
-    //         {},
-    //         amount,
-    //         (error) => {
-    //             console.log("WE GOT AN ERROR:", error)
-    //         },
-    //         () => {
-    //             console.log("WE GOOD")
-    //         }
-    //     )
-    //     console.log("Click ended...")
-    // }
-
-    // async function handleDonateSuccess() {
-    //     console.log("WE ARE IN APPROVESUCCESS")
-    // }
-
-    const { runContractFunction: getOwner } = useWeb3Contract({
+    const { runContractFunction: getNumberBackers } = useWeb3Contract({
         abi: BlockDonateAbi,
         contractAddress: blockDonateAddress,
-        functionName: "getOwner",
+        functionName: "getNumberBackers",
+    })
+    const { runContractFunction: getAmountFunded } = useWeb3Contract({
+        abi: BlockDonateAbi,
+        contractAddress: blockDonateAddress,
+        functionName: "getAmountFunded",
         params: {},
     })
 
+    const updateUIValues = async () => {
+        const totalAmountFunded = await getAmountFunded()
+        const numbBackers = await getNumberBackers()
+        console.log(numbBackers)
+
+        const balanceInEther = ethers.utils.formatEther(totalAmountFunded)
+        setAmountFunded(balanceInEther)
+        setNumberBackers(numbBackers.toNumber())
+    }
+
+    async function testcall() {
+        console.log(await getNumberBackers())
+    }
     async function test() {
         console.log("click")
         console.log("Address:", blockDonateAddress)
-        const owner = await getOwner()
-        console.log(owner)
-        fund({
-            onError: (error) => {
-                console.log("error is DETECTED")
-                console.log(error)
-            },
-            onSuccess: () => {
-                console.log("SUCCESS!!")
-            },
-        })
-        let temp = await getOwner()
-        setOwner(temp)
+        fund()
     }
+
+    useEffect(() => {
+        if (isWeb3Enabled) {
+            updateUIValues()
+        }
+    }, [isWeb3Enabled])
 
     return (
         <div className="flex flex-row justify-center mt-[2%] ">
             <div className="flex flex-col justify-start pt-5 w-[75%]">
                 <h1 className="font-semibold leading-[125%] text-[#0F172A] text-[2.1em] mb-[1.5%]">
-                    Lorem ipsum dolor sit amet
+                    Dune Tarot Deck, A Tribute
+                    <br />
                 </h1>
                 <div className="flex flex-row justify-center">
                     <div className="flex flex-col w-[55%] mr-[3%]">
                         <Image src={ImgTarot} alt="Tarot Dune" className="mb-[2%]" />
                         <div className="font-medium text-[#64748B] text-[1.1em]">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel
-                            ipsum tempor, iaculis purus eget, bibendum felis. Suspendisse sed
-                            pulvinar ipsum. Fusce at posuere ipsum, et hendrerit felis.
-                            Pellentesque vehicula dolor at lacus ultrices posuere. Suspendisse
-                            potenti. Phasellus id consequat felis.
+                            An artistic tarot deck inspired by the world of Frank Herbert's Dune.
+                            78 beautifully illustrated cards featuring characters, creatures, and
+                            landscapes. Help us bring this project to life by supporting our
+                            campaign.
                         </div>
                     </div>
                     <div className="w-[45%]">
@@ -116,7 +98,7 @@ export default function Home() {
                             <div id="inner_bar_fund" className="w-[90%] h-full rounded-[49px]" />
                         </div>
                         <h1 className="font-semibold text-[#F97316] leading-[125%] text-[1.9em] mb-[0.5%]">
-                            $ {owner}
+                            $ {amountFunded}
                         </h1>
                         <p className="font-semibold text-[#64748B] leading-[125%] mb-[3%]">
                             collected out of $60 000
@@ -124,7 +106,7 @@ export default function Home() {
                         <div className="flex flex-row mb-[3%] items-center">
                             <Image src={logoBackers} alt="logo Backers" className="mr-[2%]" />
                             <h2 className="font-semibold text-[#475569] leading-[125%]">
-                                845 backers
+                                {numberBackers} backers
                             </h2>
                         </div>
                         <div className="flex flex-row mb-[3%] items-center">
@@ -133,23 +115,29 @@ export default function Home() {
                                 17 days left
                             </h2>
                         </div>
-                        <button
-                            onClick={
-                                async () => test()
-                                /* await fund({
-                                    // onComplete:
-                                    // onError:
-                                    onSuccess: handleSuccess,
-                                    onError: (error) => console.log(error),
-                                }) */
-                            }
-                            className="bg-[#F97316] rounded-[49px] border-2	border-white border-solid text-[#ffffff] px-8 py-2.5 font-bold"
-                        >
-                            Back this project
-                        </button>
+                        <div>
+                            {isWeb3Enabled ? (
+                                <div>
+                                    <button
+                                        // todo handlefundsuccess
+                                        onClick={async () => fund()}
+                                        className="bg-[#F97316] rounded-[49px] border-2	border-white border-solid text-[#ffffff] px-8 py-2.5 font-bold"
+                                    >
+                                        Back this project
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <button className="bg-[#ffffff] rounded-[49px] pointer-events-none border-2	border-white border-solid text-[#F97316] px-8 py-2.5 font-bold">
+                                        Please connect to Web3
+                                    </button>{" "}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

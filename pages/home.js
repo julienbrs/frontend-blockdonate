@@ -26,6 +26,7 @@ export default function Home() {
     const [showFieldAmount, setShowFieldAmount] = useState(false)
     const [percentCompleted, setPercentCompleted] = useState(0)
     const [inputField, setInputField] = useState(0)
+    const [amountToSend, setAmountToSend] = useState(0)
 
     /* Callable functions */
 
@@ -33,7 +34,7 @@ export default function Home() {
         abi: BlockDonateAbi,
         contractAddress: blockDonateAddress,
         functionName: "fund",
-        msgValue: ethers.utils.parseEther(inputField.toString()),
+        msgValue: amountToSend,
         params: {},
     })
 
@@ -66,15 +67,15 @@ export default function Home() {
     async function handleSubmitFund(event) {
         event.preventDefault()
         if (typeof +inputField === "number" && !Number.isNaN(+inputField) && inputField != 0) {
-            console.log(inputField)
-            fund({
-                onError: (error) => {
-                    console.log(error)
-                },
-                onSuccess: () => {
-                    handleFundSuccess()
-                },
-            })
+            setAmountToSend(ethers.utils.parseEther(inputField.toString())),
+                fund({
+                    onError: (error) => {
+                        console.log(error)
+                    },
+                    onSuccess: () => {
+                        handleFundSuccess()
+                    },
+                })
         } else {
             console.log("we here")
             dispatch({

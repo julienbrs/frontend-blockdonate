@@ -9,7 +9,11 @@ module.exports = {
             fieryorange: "#EA580C",
             lightgrey: "#64748B",
         },
-        extend: {},
+        extend: {
+            width: {
+                custom: "w-${roundedWidth}",
+            },
+        },
     },
     plugins: [],
 }

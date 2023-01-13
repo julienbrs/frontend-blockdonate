@@ -24,9 +24,16 @@ export default function Home() {
                     <Link
                         href="/home"
                         id="button_discover_lp"
-                        className="px-10 py-3 text-[#ffffff] font-bold "
+                        className="px-10 py-3 text-[#ffffff] font-bold mr-[5%] "
                     >
                         Discover
+                    </Link>
+                    <Link
+                        id="button_github"
+                        href="https://github.com/julienbrs"
+                        className="px-9 py-3 text-[#F97316] bg-[#F1F5F9] font-bold  rounded-[49px] "
+                    >
+                        View Code
                     </Link>
                 </div>
                 <div className="flex flex-col justify-end items-end h-[100%] ">

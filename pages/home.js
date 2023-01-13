@@ -2,7 +2,6 @@ import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useNotification } from "web3uikit"
 import { ethers } from "ethers"
-import Footer from "../components/Footer"
 
 import ImgTarot from "../components/assets/ImgTarot.png"
 import logoBackers from "../components/assets/logoBackers.png"
@@ -103,7 +102,7 @@ export default function Home() {
     }, [isWeb3Enabled])
 
     return (
-        <div className="flex flex-col space-between">
+        <div className="flex flex-col space-between justify-end">
             <div className="flex flex-row justify-center mt-[2%] ">
                 <div className="flex flex-col justify-start pt-5 w-[75%]">
                     <h1 className="font-semibold leading-[125%] text-[#0F172A] text-[2.1em] mb-[1.5%]">
@@ -220,7 +219,6 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     )
 }

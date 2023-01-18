@@ -30,7 +30,7 @@ export default function Home() {
                     </Link>
                     <Link
                         id="button_github"
-                        href="https://github.com/julienbrs"
+                        href="https://github.com/julienbrs/frontend-blockdonate"
                         className="px-9 py-3 text-[#F97316] bg-[#F1F5F9] font-bold  rounded-[49px] "
                     >
                         View Code

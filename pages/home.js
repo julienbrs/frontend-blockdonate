@@ -16,18 +16,23 @@ import { useWeb3Contract, useMoralis } from "react-moralis"
 export default function Home() {
     const { chainId, account, isWeb3Enabled } = useMoralis()
     const chainIdString = chainId ? parseInt(chainId).toString() : null
-    const blockDonateAddress = chainId ? networkMapping[chainIdString].FundMe[0] : null
-
+    let blockDonateAddress
     const dispatch = useNotification()
+    updateAddress()
 
     const [amount, setAmount] = useState(0.1)
-    const [amountFunded, setAmountFunded] = useState(0)
+    const [amountFunded, setAmountFunded] = useState("NaN")
     const [numberBackers, setNumberBackers] = useState(0)
     const [showFieldAmount, setShowFieldAmount] = useState(false)
     const [percentCompleted, setPercentCompleted] = useState(0)
     const [inputField, setInputField] = useState(0)
     const [amountToSend, setAmountToSend] = useState(0)
 
+    function updateAddress() {
+        if (chainIdString in networkMapping) {
+            blockDonateAddress = chainId ? networkMapping[chainIdString].FundMe[0] : null
+        }
+    }
     /* Callable functions */
 
     const { runContractFunction: fund } = useWeb3Contract({
@@ -53,39 +58,63 @@ export default function Home() {
     })
 
     const updateUIValues = async () => {
-        const totalAmountFunded = await getAmountFunded()
-        const numbBackers = await getNumberBackers()
-        const balanceInEther = ethers.utils.formatEther(totalAmountFunded)
+        if (isWeb3Enabled && chainIdString in networkMapping) {
+            updateAddress()
+            const totalAmountFunded = await getAmountFunded()
+            const numbBackers = await getNumberBackers()
+            const balanceInEther = ethers.utils.formatEther(totalAmountFunded)
 
-        const percent = Math.round((balanceInEther / 7.5) * 100)
+            const percent = Math.round((balanceInEther / 7.5) * 100)
 
-        setAmountFunded(balanceInEther)
-        setNumberBackers(numbBackers.toNumber())
-        setPercentCompleted(percent)
+            setAmountFunded(balanceInEther)
+            setNumberBackers(numbBackers.toNumber())
+            setPercentCompleted(percent)
+        } else {
+            dispatch({
+                type: "error",
+                title: "Web3 Not Connected",
+                message: "Please connect to goerli testnet",
+                position: "topR",
+            })
+        }
     }
 
     async function handleSubmitFund(event) {
         event.preventDefault()
-        if (typeof +inputField === "number" && !Number.isNaN(+inputField) && inputField != 0) {
-            setAmountToSend(ethers.utils.parseEther(inputField.toString())),
-                fund({
-                    onError: (error) => {
-                        console.log(error)
-                    },
-                    onSuccess: () => {
-                        handleFundSuccess()
-                    },
+        if (isWeb3Enabled && chainIdString in networkMapping) {
+            updateAddress()
+            if (typeof +inputField === "number" && !Number.isNaN(+inputField) && inputField > 0) {
+                setAmountToSend(ethers.utils.parseEther(inputField.toString())),
+                    fund({
+                        onError: (error) => {
+                            console.log(error)
+                            dispatch({
+                                type: "error",
+                                title: "Funding Failed",
+                                message: "Please check console for error",
+                                position: "topR",
+                            })
+                        },
+                        onSuccess: () => {
+                            handleFundSuccess()
+                        },
+                    })
+            } else {
+                dispatch({
+                    type: "warning",
+                    message: "Warning: amount incorrect",
+                    title: "Enter a valid number",
+                    position: "topR",
                 })
+            }
         } else {
-            console.log("we here")
             dispatch({
                 type: "warning",
-                message: "Warning: amount incorrect",
-                title: "Enter a valid number",
+                title: "Web3 Not Connected",
+                message: "Please connect to goerli testnet ",
                 position: "topR",
             })
         }
-        console.log("we finish")
     }
 
     const handleFundSuccess = async () => {
@@ -100,7 +129,7 @@ export default function Home() {
         if (isWeb3Enabled) {
             updateUIValues()
         }
-    }, [isWeb3Enabled])
+    }, [isWeb3Enabled, chainIdString])
 
     return (
         <div className="flex flex-col space-between justify-end">
@@ -176,7 +205,6 @@ export default function Home() {
                                                                     setInputField(
                                                                         event.target.value
                                                                     )
-                                                                    console.log(inputField)
                                                                 }}
                                                             />
                                                         </label>

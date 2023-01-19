@@ -134,22 +134,22 @@ export default function Home() {
     return (
         <div className="flex flex-col space-between justify-end">
             <div className="flex flex-row justify-center mt-[2%] ">
-                <div className="flex flex-col justify-start pt-5 w-[75%]">
-                    <h1 className="font-semibold leading-[125%] text-[#0F172A] text-[2.1em] mb-[1.5%]">
+                <div className="flex flex-col justify-start pt-5 w-[75%] wrapper-h">
+                    <h1 className="font-semibold leading-[125%] text-[#0F172A] text-[2.1em] mb-[1.5%] title-h">
                         Dune Tarot Deck, A Tribute
                         <br />
                     </h1>
-                    <div className="flex flex-row justify-center">
+                    <div className="flex flex-row justify-center wrapper-h">
                         <div className="flex flex-col w-[55%] mr-[3%]">
                             <Image src={ImgTarot} alt="Tarot Dune" className="mb-[2%]" />
-                            <div className="font-medium text-[#64748B] text-[1.1em]">
+                            <div className="font-medium text-[#64748B] text-[1.1em] text-h">
                                 An artistic tarot deck inspired by the world of Frank Herbert's
                                 Dune. 78 beautifully illustrated cards featuring characters,
                                 creatures, and landscapes. Help us bring this project to life by
                                 supporting our campaign.
                             </div>
                         </div>
-                        <div className="w-[45%]">
+                        <div className="w-[45%] h-txt-b">
                             <div
                                 id="wrapper_bar_fund"
                                 className="h-[2.5%] bg-[#F9FAFB] w-[95%] rounded-[49px] mb-[2.5%]"
@@ -167,13 +167,21 @@ export default function Home() {
                                 collected out of 7.5 ETH
                             </p>
                             <div className="flex flex-row mb-[3%] items-center">
-                                <Image src={logoBackers} alt="logo Backers" className="mr-[2%]" />
+                                <Image
+                                    src={logoBackers}
+                                    alt="logo Backers"
+                                    className="mr-[2%] img-home"
+                                />
                                 <h2 className="font-semibold text-[#475569] leading-[125%]">
                                     {numberBackers} backers
                                 </h2>
                             </div>
                             <div className="flex flex-row mb-[3%] items-center">
-                                <Image src={logoClock} alt="Logo Clck" className="mr-[2%]" />
+                                <Image
+                                    src={logoClock}
+                                    alt="Logo Clck"
+                                    className="mr-[2%] img-home"
+                                />
                                 <h2 className="font-semibold text-[#475569] leading-[125%]">
                                     17 days left
                                 </h2>
@@ -187,7 +195,7 @@ export default function Home() {
                                                 onClick={() => {
                                                     setShowFieldAmount(true)
                                                 }}
-                                                className="bg-[#F97316] rounded-[49px] border-2	border-white border-solid text-[#ffffff] px-8 py-2.5 font-bold"
+                                                className="bg-[#F97316] rounded-[49px] border-2	border-white border-solid text-[#ffffff] px-8 py-2.5 font-bold b-h"
                                             >
                                                 Back this project
                                             </button>
